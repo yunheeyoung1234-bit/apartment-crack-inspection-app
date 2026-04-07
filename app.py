@@ -146,10 +146,10 @@ def main() -> None:
                 st.error(f"CSV 저장 중 오류가 발생했습니다: {error}")
 
     with col_pdf:
-        if st.button("PDF 보고서 생성", width="stretch"):
+        if st.button("PDF 생성 준비", width="stretch"):
             timestamp = datetime.now().isoformat(timespec="seconds")
             try:
-                pdf_path = generate_pdf_report(
+                pdf_bytes, download_name = generate_pdf_report(
                     filename=uploaded_file.name,
                     predicted_defect_type=summary.main_defect_type,
                     detected_issue_count=summary.issue_count,
@@ -174,9 +174,22 @@ def main() -> None:
                     inspector_name=inspector_name,
                     timestamp=timestamp,
                 )
-                st.success(f"PDF 보고서를 생성했습니다: {pdf_path}")
+                st.session_state["pdf_bytes"] = pdf_bytes
+                st.session_state["pdf_download_name"] = download_name
+                st.success("PDF가 생성되었습니다. 아래 버튼으로 다운로드하세요.")
             except Exception as error:
                 st.error(f"PDF 생성 중 오류가 발생했습니다: {error}")
+
+    pdf_bytes = st.session_state.get("pdf_bytes")
+    pdf_download_name = st.session_state.get("pdf_download_name")
+    if pdf_bytes and pdf_download_name:
+        st.download_button(
+            "PDF 다운로드",
+            data=pdf_bytes,
+            file_name=pdf_download_name,
+            mime="application/pdf",
+            width="stretch",
+        )
 
 
 def resolve_mm_per_px(scale_mode: str) -> tuple[float, str | None]:
