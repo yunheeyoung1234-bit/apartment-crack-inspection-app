@@ -10,6 +10,12 @@ pip install -r requirements.txt
 
 학습된 모델 파일을 `models/best.pt` 위치에 두세요.
 
+
+## 데모 버전 실행 사이트
+
+https://apartment-crack-inspection-app-bkvazrxbg6rnjgnwuwkhyf.streamlit.app/
+(접속 상태에 따라 링크가 안열릴 수 있습니다.)
+
 ## 실행
 
 ```bash
